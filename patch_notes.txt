@@ -1,0 +1,31 @@
+Rabbit World version 1.6:
+    Levels
+    ...
+
+Rabbit World version 1.5:
+    Drop potions
+    Drink potions
+
+Rabbit World version 1.4:
+    New animals
+    New items
+    Armor
+    Health
+
+Rabbit World version 1.3:
+    New animals
+    New items
+    Damage
+
+Rabbit World version 1.2:
+    Prettier grass block
+    Loot bug fixes
+
+Rabbit World version 1.1:
+    Wild rabbits
+    Chests
+    New loot
+    Inventory / Item bar
+
+Rabbit World version 1.0:
+    2d Simplex generated map
