@@ -1,8 +1,8 @@
 class Animal {
     constructor(type="bear", x=Math.floor(Math.random()*mapSize.w), y=Math.floor(Math.random()*mapSize.h)) {
         this.startPos = {
-            x: x, 
-            y: y
+            x: parseInt(x), 
+            y: parseInt(y)
         };
         this.pos = {
             x: this.startPos.x,
@@ -28,14 +28,19 @@ class Animal {
                 break;
         }
         this.dir = 0;
-        this.goTo = {x: this.startPos.x+Math.floor(Math.random()*16)-8, y: this.startPos.y+Math.floor(Math.random()*16)-8};
         while (mapArr[this.startPos.y][this.startPos.x].block == "water") {
-
             this.startPos = {
                 x:Math.floor(Math.random()*mapSize.w), 
                 y: Math.floor(Math.random()*mapSize.h)
             };
+        }
 
+        this.goTo = {
+            x: parseInt(this.startPos.x+Math.floor(Math.random()*16)-8), 
+            y: parseInt(this.startPos.y+Math.floor(Math.random()*16)-8)
+        };
+
+        while (mapArr[this.goTo.y][this.goTo.x].block == "water") {
             this.goTo = {
                 x: this.startPos.x+Math.floor(Math.random()*16)-8, 
                 y: this.startPos.y+Math.floor(Math.random()*16)-8
@@ -80,26 +85,37 @@ class Animal {
     }
 
     #behave() {
+
+        //Direction
         if (this.goTo.x >= this.startPos.x) {
             this.dir = 0;
         }else {
             this.dir = 1;
         }
 
+        //Go to goTo
         if (this.goTo.x > this.startPos.x && this.rn == 0) {
+
             this.startPos.x += speed*this.speed;
             this.startPos.x = Math.round(this.startPos.x*1000)/1000;
+
         }else if (this.goTo.x < this.startPos.x && this.rn == 0) {
+
             this.startPos.x -= speed*this.speed;
             this.startPos.x = Math.round(this.startPos.x*1000)/1000;
+
         }
 
         if (this.goTo.y > this.startPos.y && this.rn == 1) {
+
             this.startPos.y += speed*this.speed;
             this.startPos.y = Math.round(this.startPos.y*1000)/1000;
+
         }else if (this.goTo.y < this.startPos.y && this.rn == 1) {
+
             this.startPos.y -= speed*this.speed;
             this.startPos.y = Math.round(this.startPos.y*1000)/1000;
+
         }
 
         if (this.startPos.x == Math.floor(this.startPos.x) && this.rn == 0) {
@@ -111,20 +127,24 @@ class Animal {
         //New goTo
         if (this.startPos.x == this.goTo.x && this.startPos.y == this.goTo.y) {
 
-            this.startPos.x = Math.round(this.startPos.x);
-            this.startPos.y = Math.round(this.startPos.y);
-
             let goT = {
-                x: Math.round(this.startPos.x+Math.floor(Math.random()*16)-8), 
-                y: Math.round(this.startPos.y+Math.floor(Math.random()*16)-8)
+                x: parseInt(Math.round(this.startPos.x+Math.floor(Math.random()*16)-8)), 
+                y: parseInt(Math.round(this.startPos.y+Math.floor(Math.random()*16)-8))
             };
 
-                while (mapArr[Math.round(goT.y)][Math.round(this.goTo.x)].block == "water") {
+            for (let i = 0; i < 10; i++) {
+                if (mapArr[Math.round(goT.y)][Math.round(this.goTo.x)].block == "water") {
                     goT = {
-                        x: Math.round(this.startPos.x+Math.floor(Math.random()*16)-8), 
-                        y: Math.round(this.startPos.y+Math.floor(Math.random()*16)-8)
+                        x: parseInt(Math.round(this.startPos.x+Math.floor(Math.random()*16)-8)), 
+                        y: parseInt(Math.round(this.startPos.y+Math.floor(Math.random()*16)-8))
                     };
                 }
+            }
+
+            if (typeof goT.x == "number") {
+                this.goTo.x = goT.x;
+                this.goTo.y = goT.y;
+            }
         }
     }
 }
