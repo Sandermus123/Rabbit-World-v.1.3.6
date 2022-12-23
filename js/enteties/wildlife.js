@@ -126,23 +126,27 @@ class Animal {
         if (this.startPos.x == this.goTo.x && this.startPos.y == this.goTo.y) {
 
             let goT = {
-                x: parseInt(Math.round(this.startPos.x+Math.floor(Math.random()*16)-8)), 
-                y: parseInt(Math.round(this.startPos.y+Math.floor(Math.random()*16)-8))
+                x: Math.round(this.startPos.x+Math.floor(Math.random()*16)-8), 
+                y: Math.round(this.startPos.y+Math.floor(Math.random()*16)-8)
             };
 
-            for (let i = 0; i < 10; i++) {
-                if (mapArr[Math.round(goT.y)][Math.round(this.goTo.x)].block == "water") {
-                    goT = {
-                        x: parseInt(Math.round(this.startPos.x+Math.floor(Math.random()*16)-8)), 
-                        y: parseInt(Math.round(this.startPos.y+Math.floor(Math.random()*16)-8))
-                    };
+            try {
+                for (let i = 0; i < 10; i++) {
+                    if (mapArr[Math.round(goT.y)][Math.round(this.goTo.x)].block == "water") {
+                        goT = {
+                            x: Math.round(this.startPos.x+Math.floor(Math.random()*16)-8), 
+                            y: Math.round(this.startPos.y+Math.floor(Math.random()*16)-8)
+                        };
+                    }
                 }
+            } catch (error) {
+                
             }
 
-            if (typeof goT.x == "number") {
+            
                 this.goTo.x = goT.x;
                 this.goTo.y = goT.y;
-            }
+            
         }
     }
 }
