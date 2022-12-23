@@ -1,13 +1,20 @@
 class Animal {
     constructor(type="bear", x=Math.floor(Math.random()*mapSize.w), y=Math.floor(Math.random()*mapSize.h)) {
         this.startPos = {
-            x: parseInt(x), 
-            y: parseInt(y)
+            x: x, 
+            y: y
         };
+
+        while (mapArr[this.startPos.y][this.startPos.x].block == "water") {
+            this.startPos.x = Math.floor(Math.random()*mapSize.w);
+            this.startPos.y = Math.floor(Math.random()*mapSize.h);
+        }
+
         this.pos = {
             x: this.startPos.x,
             y: this.startPos.y
         };
+
         this.type = type;
         switch (this.type) {
             case "bear":
@@ -28,24 +35,12 @@ class Animal {
                 break;
         }
         this.dir = 0;
-        while (mapArr[this.startPos.y][this.startPos.x].block == "water") {
-            this.startPos = {
-                x:Math.floor(Math.random()*mapSize.w), 
-                y: Math.floor(Math.random()*mapSize.h)
-            };
-        }
 
         this.goTo = {
-            x: parseInt(this.startPos.x+Math.floor(Math.random()*16)-8), 
-            y: parseInt(this.startPos.y+Math.floor(Math.random()*16)-8)
+            x: this.startPos.x+Math.floor(Math.random()*16)-8, 
+            y: this.startPos.y+Math.floor(Math.random()*16)-8
         };
 
-        while (mapArr[this.goTo.y][this.goTo.x].block == "water") {
-            this.goTo = {
-                x: this.startPos.x+Math.floor(Math.random()*16)-8, 
-                y: this.startPos.y+Math.floor(Math.random()*16)-8
-            };
-        }
         this.speed = 1;
         this.vel = {x: 0, y: 0};
         this.rn = Math.round(Math.random());
@@ -67,9 +62,11 @@ class Animal {
         }
     }
 
-    update() {
+    update () {
+
         this.pos.x = Math.round((this.startPos.x-pos.x)*1000)/1000;
         this.pos.y = Math.round((this.startPos.y-pos.y)*1000)/1000;
+
         c.drawImage(
             animal_spritesheet,
             this.ic.x*this.dir,
@@ -81,7 +78,8 @@ class Animal {
             blockSize,
             blockSize
         );
-        this.#behave();
+        
+        //this.#behave();
     }
 
     #behave() {
