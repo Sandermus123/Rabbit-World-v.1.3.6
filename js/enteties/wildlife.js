@@ -78,8 +78,8 @@ class Animal {
             blockSize,
             blockSize
         );
-        
-        //this.#behave();
+
+        this.#behave();
     }
 
     #behave() {
