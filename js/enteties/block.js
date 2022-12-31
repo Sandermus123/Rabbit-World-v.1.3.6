@@ -47,6 +47,40 @@ class Block {
         }
     }
     update() {
+
+        switch (this.block) {
+            case "grass":
+                this.ic = {
+                    x: 0, 
+                    y: 0, 
+                    w: spriteSheetGridSize, 
+                    h: spriteSheetGridSize
+                };
+                break;
+            case "water":
+                this.ic = {
+                    x: spriteSheetGridSize, 
+                    y: 0, 
+                    w: spriteSheetGridSize, 
+                    h: spriteSheetGridSize
+                };
+                break;
+            case "sand":
+                this.ic = {
+                    x: spriteSheetGridSize*4, 
+                    y: 0, 
+                    w: spriteSheetGridSize, 
+                    h: spriteSheetGridSize};
+                break;
+            default:
+                this.ic = {
+                    x: spriteSheetGridSize*3, 
+                    y: 0, 
+                    w: spriteSheetGridSize, 
+                    h: spriteSheetGridSize};
+                break;
+        }
+
         this.pos = {x: (this.index.x-pos.x), y: (this.index.y-pos.y)};
                 c.drawImage(
                     spriteSheet,

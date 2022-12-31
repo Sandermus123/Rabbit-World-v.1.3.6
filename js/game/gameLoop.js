@@ -61,6 +61,54 @@ function getLootData(lootType, dataType) {
                 h: spriteSheetGridSize
             };
             break;
+        case "meat_bear":
+            IC = {
+                x: 0, 
+                y: spriteSheetGridSize*3, 
+                w: spriteSheetGridSize, 
+                h: spriteSheetGridSize
+            };
+            break;
+        case "feathers":
+            IC = {
+                x: spriteSheetGridSize,
+                y: spriteSheetGridSize*3,
+                w: spriteSheetGridSize,
+                h: spriteSheetGridSize
+            };
+            break;
+        case "meat_rabbit":
+            IC = {
+                x: spriteSheetGridSize*2,
+                y: spriteSheetGridSize*3,
+                w: spriteSheetGridSize,
+                h: spriteSheetGridSize
+            };
+            break;
+        case "shell_turtle":
+            IC = {
+                x: spriteSheetGridSize*3,
+                y: spriteSheetGridSize*3,
+                w: spriteSheetGridSize,
+                h: spriteSheetGridSize
+            };
+            break;
+        case "slime":
+            IC = {
+                x: spriteSheetGridSize*4,
+                y: spriteSheetGridSize*3,
+                w: spriteSheetGridSize,
+                h: spriteSheetGridSize
+            };
+            break;
+        default:
+            IC = {
+                x: 0, 
+                y: spriteSheetGridSize*4, 
+                w: spriteSheetGridSize, 
+                h: spriteSheetGridSize
+            };
+            break;
     }
     switch (dataType) {
         case "ic":
@@ -77,6 +125,8 @@ function gameLoop() {
     nextTick = false;
     tick += tickSpeed;
     if (tick > 1) { nextTick = true; tick = 0; }
+
+    //walk
 
     pos.x = Math.round(pos.x*10000)/10000;
     pos.y = Math.round(pos.y*10000)/10000;
@@ -106,9 +156,13 @@ function gameLoop() {
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
+    //Mousepress
+
     if (!realPress && !mousePressed) {
         realPress = true;
     }
+
+    //world
 
     for (let k = 0; k < mapSize.h; k++) {
         for (let l = 0; l < mapSize.w; l++) {
@@ -116,6 +170,7 @@ function gameLoop() {
         }
     }
 
+    //chests
     for (let i = 0; i < chests.length; i++) {
         chests[i].update();
         if (
@@ -144,6 +199,7 @@ function gameLoop() {
         }
     }
 
+    //wildlife
     let index = undefined;
     for (let i = 0; i < wildlife.length; i++) {
         wildlife[i].update();
@@ -164,6 +220,24 @@ function gameLoop() {
             wildlife[i].health -= pl.damage;
             realPress = false;
             if (wildlife[i].health <= 0) {
+                switch (wildlife[i].type) {
+                    case "bear":
+                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), Math.round(wildlife[i].startPos.y), "meat_bear"));
+                        break;
+                    case "rabbit":
+                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), Math.round(wildlife[i].startPos.y), "meat_rabbit"));
+                        break;
+                    case "sanderling":
+                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), Math.round(wildlife[i].startPos.y), "feathers"));
+                        break;
+                    case "frog":
+                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), Math.round(wildlife[i].startPos.y), "slime"));
+                        break;
+                    case "turtle":
+                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), Math.round(wildlife[i].startPos.y), "shell_turtle"));
+                        break;
+                }
+                
                 index = i;
             }
         }
@@ -171,6 +245,8 @@ function gameLoop() {
     if (index !== undefined) {
         wildlife.splice(index, 1);
     }
+
+    //loot
 
     let sel;
     for (let m = loot.length-1; m >= 0; m--) {
@@ -188,6 +264,8 @@ function gameLoop() {
             mousePressed
             &&
             realPress
+            &&
+            !rightClick
         ) {
             if (inventory[selected] != null) {
                 dropLoot = true;
@@ -209,6 +287,7 @@ function gameLoop() {
     }
     dropLoot = false;
 
+    //player
     pl.update();
 
     //cursor
@@ -235,21 +314,51 @@ function gameLoop() {
         blockSize
     );
 
+    //inventory
     for (let i = 0; i < inventory.length; i++) {
 
         let _type = inventory[i];
         let _ic = getLootData(_type, "ic");
 
+        if (inventory[i] != null) {
+            c.drawImage(
+                item_spritesheet,
+                _ic.x,
+                _ic.y,
+                _ic.w,
+                _ic.h,
+                i*inventoryCellSize+inventoryLeft,
+                inventoryTop,
+                inventoryCellSize,
+                inventoryCellSize
+            );
+        }
+
         c.drawImage(
-            item_spritesheet,
-            _ic.x,
-            _ic.y,
-            _ic.w,
-            _ic.h,
+            spriteSheet,
+            spriteSheetGridSize,
+            spriteSheetGridSize,
+            spriteSheetGridSize,
+            spriteSheetGridSize,
             i*inventoryCellSize+inventoryLeft,
             inventoryTop,
             inventoryCellSize,
             inventoryCellSize
+        );
+    }
+
+    //health bar
+    for (let i = 0; i < hp; i++) {
+        c.drawImage(
+            spriteSheet,
+            0,
+            spriteSheetGridSize*5,
+            spriteSheetGridSize,
+            spriteSheetGridSize,
+            i*healthBarCellSize+healthBarLeft,
+            healthBarTop,
+            healthBarCellSize,
+            healthBarCellSize
         );
     }
     
@@ -265,6 +374,42 @@ function gameLoop() {
         inventoryCellSize
     );
 
+    for (let i = 0; i < mapArr.length; i++) {
+        for (let j = 0; j < mapArr[i].length; j++) {
+            switch (mapArr[i][j].block) {
+                case "grass":
+                    c.fillStyle = "#2B8A2C";
+                    c.fillRect(j*2, i*2, 2, 2);
+                    break;
+                case "sand":
+                    try {
+                        if (mapArr[i+1][j].block == "grass" || mapArr[i-1][j].block == "grass" || mapArr[i][j+1].block == "grass" || mapArr[i][j-1].block == "grass") {
+                            c.fillStyle = "#c4a962";
+                            c.fillRect(j*2, i*2, 2, 2);
+                        }else {
+                            c.fillStyle = "#EBCE81";
+                            c.fillRect(j*2, i*2, 2, 2);
+                        }
+                    } catch (error) {
+                        c.fillStyle = "#EBCE81";
+                        c.fillRect(j*2, i*2, 2, 2);
+                    }
+                    break;
+                case "water":
+                    c.fillStyle = "#22AACC";
+                    c.fillRect(j*2, i*2, 2, 2);
+                    break;
+            }
+            
+        }
+    }
+
+
+
+    c.fillStyle = "#000000";
+    c.fillRect((pl.pos.x)*2, (pl.pos.y)*2, 2, 2);
+
+    //walk
     if (canWalk && vel.x == 0 && vel.y == 0) {
             //keys
             if (keys.a && !keys.w && !keys.s) {

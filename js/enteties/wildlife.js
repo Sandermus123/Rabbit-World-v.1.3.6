@@ -1,5 +1,6 @@
 class Animal {
-    constructor(type="bear", x=Math.floor(Math.random()*mapSize.w), y=Math.floor(Math.random()*mapSize.h)) {
+    constructor(type=Math.floor(Math.random()*wildlifeTypes.length), x=Math.floor(Math.random()*mapSize.w), y=Math.floor(Math.random()*mapSize.h)) {
+
         this.startPos = {
             x: x, 
             y: y
@@ -15,23 +16,85 @@ class Animal {
             y: this.startPos.y
         };
 
-        this.type = type;
+        this.variation = Math.round(Math.random());
+
+        this.type = wildlifeTypes[type];
+
+        this.health = 0;
+        this.range = 0;
+        this.damage = 0;
+
         switch (this.type) {
             case "bear":
                 this.ic = {
-                    x: spriteSheetGridSize, 
+                    x: 0, 
                     y: spriteSheetGridSize, 
                     w: spriteSheetGridSize, 
                     h: spriteSheetGridSize
                 };
+                this.health = 10;
+                this.range = 10;
+                this.damage = 3
                 break;
             case "rabbit":
+                if (this.variation == 0) {
+                    this.ic = {
+                        x: 0, 
+                        y: 0, 
+                        w: spriteSheetGridSize, 
+                        h: spriteSheetGridSize
+                    };
+                }else {
+                    this.ic = {
+                        x: spriteSheetGridSize*2, 
+                        y: 0, 
+                        w: spriteSheetGridSize, 
+                        h: spriteSheetGridSize
+                    };
+                }
+                this.health = 4;
+                this.range = 8;
+                this.damage = 1;
+                break;
+            case "sanderling":
                 this.ic = {
-                    x: spriteSheetGridSize, 
-                    y: 0, 
+                    x: 0, 
+                    y: spriteSheetGridSize*2, 
                     w: spriteSheetGridSize, 
                     h: spriteSheetGridSize
                 };
+                this.health = 3;
+                this.range = 6;
+                this.damage = 2;
+                break;
+            case "turtle":
+                this.ic = {
+                    x: 0, 
+                    y: spriteSheetGridSize*3, 
+                    w: spriteSheetGridSize, 
+                    h: spriteSheetGridSize
+                };
+                this.health = 5;
+                this.range = 3;
+                this.damage = 1;
+                break;
+            case "frog":
+                this.ic = {
+                    x: 0, 
+                    y: spriteSheetGridSize*4, 
+                    w: spriteSheetGridSize, 
+                    h: spriteSheetGridSize
+                };
+                this.health = 2;
+                this.range = 15;
+                this.damage = 2;
+                break;
+            default:
+                this.ic = {
+                    x: 0, 
+                    y: spriteSheetGridSize*3, 
+                    w: spriteSheetGridSize, 
+                    h: spriteSheetGridSize};
                 break;
         }
         this.dir = 0;
@@ -47,20 +110,9 @@ class Animal {
 
         this.speed = 0.25;
 
-        this.health = 0;
-
-        switch (this.type) {
-            case "rabbit":
-                this.health = 4;
-                break;
-            case "bear":
-                this.health = 10;
-                break;
-            case "sanderling":
-                this.health = 3;
-                break;
-        }
     }
+
+     
 
     update () {
 
@@ -69,7 +121,7 @@ class Animal {
 
         c.drawImage(
             animal_spritesheet,
-            this.ic.x*this.dir,
+            this.ic.x+spriteSheetGridSize*this.dir,
             this.ic.y,
             this.ic.w,
             this.ic.h,
@@ -80,6 +132,10 @@ class Animal {
         );
 
         this.#behave();
+
+        if (sl.touches(this.startPos.x, this.startPos.y, 1, 1, pl.pos.x, pl.pos.y, 1, 1) && nextTick) {
+            hp--;
+        }
     }
 
     #behave() {
@@ -125,27 +181,62 @@ class Animal {
         //New goTo
         if (this.startPos.x == this.goTo.x && this.startPos.y == this.goTo.y) {
 
-            let goT = {
-                x: Math.round(this.startPos.x+Math.floor(Math.random()*16)-8), 
-                y: Math.round(this.startPos.y+Math.floor(Math.random()*16)-8)
-            };
+            if (
+                Math.abs(
+                    Math.floor(
+                        Math.sqrt(
+                            Math.pow(pl.pos.x-this.startPos.x, 2) + 
+                            Math.pow(pl.pos.y-this.startPos.y, 2)
+                        )
+                    )
+                ) <= this.range
+                ) {
+                this.goT = {
+                    x: Math.floor(pl.pos.x), 
+                    y: Math.floor(pl.pos.y)
+                };
+                
 
-            try {
-                for (let i = 0; i < 10; i++) {
-                    if (mapArr[Math.round(goT.y)][Math.round(this.goTo.x)].block == "water") {
-                        goT = {
+            }else {
+                this.goT = {
+                    x: Math.round(this.startPos.x+Math.floor(Math.random()*16)-8), 
+                    y: Math.round(this.startPos.y+Math.floor(Math.random()*16)-8)
+                };
+
+        
+                try {
+                    for (let i = 0; i < 10; i++) {
+                    if (mapArr[Math.round(this.goT.y)][Math.round(this.goTo.x)].block == "water") {
+                        
+                        this.goT = {
                             x: Math.round(this.startPos.x+Math.floor(Math.random()*16)-8), 
                             y: Math.round(this.startPos.y+Math.floor(Math.random()*16)-8)
                         };
+                        
                     }
                 }
-            } catch (error) {
-                
-            }
 
+                this.goT = {
+                    x: clamp(Math.round(this.startPos.x+Math.floor(Math.random()*90)-45), 0, mapArr[0].length-1), 
+                    y: clamp(Math.round(this.startPos.y+Math.floor(Math.random()*90)-45), 0, mapArr.length-1)
+                };
+                
+                for (let i = 0; i < 10; i++) {
+                    if (mapArr[Math.round(this.goT.y)][Math.round(this.goTo.x)].block == "water") {
+                        
+                        this.goT = {
+                            x: clamp(Math.round(this.startPos.x+Math.floor(Math.random()*90)-45), 0, mapArr[0].length-1), 
+                            y: clamp(Math.round(this.startPos.y+Math.floor(Math.random()*90)-45), 0, mapArr.length-1)
+                        };
+                        
+                    }
+                }
+            }catch(error) {};
+
+            }
             
-                this.goTo.x = goT.x;
-                this.goTo.y = goT.y;
+                this.goTo.x = this.goT.x;
+                this.goTo.y = this.goT.y;
             
         }
     }

@@ -26,18 +26,68 @@ document.addEventListener("keypress", event => {
                 inventory[selected] = null;
             }
             break;
+        
+        case "e":
+            switch (inventory[selected]) {
+                case "meat_bear":
+
+                    if (hp < 3) {
+                        hp += 3;
+                        inventory[selected] = null;
+                    }else if (hp == 3) {
+                        hp += 2;
+                        inventory[selected] = null;
+                    }else if (hp == 4) {
+                        hp++;
+                        inventory[selected] = null;
+                    }
+                    break;
+            case "meat_rabbit":
+
+                if (hp < 4) {
+                    hp += 2;
+                    inventory[selected] = null;
+                }else if (hp == 4) {
+                    hp++;
+                    inventory[selected] = null;
+                }
+                    break;
+                case "apple":
+
+                    if (hp < 5) {
+                        hp++;
+                        inventory[selected] = null;
+                    }
+            }
+            
+            break;
+    
+
+        
         case "1":
-            selected = 0;
-            pl.damage = getLootData(inventory[selected], "damage");
+            if (parseInt(key) <= inventorySize) {
+                selected = 0;
+                pl.damage = getLootData(inventory[selected], "damage");
+            }
             break;
         case "2":
-            selected = 1;
-            pl.damage = getLootData(inventory[selected], "damage");
+            if (parseInt(key) <= inventorySize) {
+                selected = 1;
+                pl.damage = getLootData(inventory[selected], "damage");
+            }
             break;
         case "3":
-            selected = 2;
-            pl.damage = getLootData(inventory[selected], "damage");
+            if (parseInt(key) <= inventorySize) {
+                selected = 2;
+                pl.damage = getLootData(inventory[selected], "damage");
+            }
             break;
+        case "4":
+            if (parseInt(key) <= inventorySize) {
+                selected = 3;
+                pl.damage = getLootData(inventory[selected], "damage");                    }
+            break;
+        
     }
 });
 
@@ -65,6 +115,18 @@ function cursorUpdate(e) {
     cursorPos.y = e.clientY*2;
     cursorPos.X = Math.floor(cursorPos.x/blockSize);
     cursorPos.Y = Math.floor(cursorPos.y/blockSize);
+}
+
+var rightClick = false;
+
+document.onmousedown = click
+               
+function click(event) {
+                if (event.button == 2) {
+                    rightClick = true;
+                }else {
+                    rightClick = false;
+                }
 }
 
 document.addEventListener('mousedown', mdown);

@@ -77,21 +77,30 @@ var cursorPos = {x: 0, y: 0, X: 0, Y: 0};
 cursorPos.X = Math.floor(cursorPos.x/blockSize);
 cursorPos.Y = Math.floor(cursorPos.y/blockSize);
 
-const startChestAmount = 50;
-const startWildlifeAmount = 60;
+const startChestAmount = 30;
+const startWildlifeAmount = 50;
 var loot = [];
 var lootTypes = ["potion_poison", "potion_water", "sword_flint", "sword_quartz", "sword_carbon", "apple"];
 var chests = [];
 var wildlife = [];
 
-var inventorySize = 3;
+var inventorySize = 4;
 var inventory = new Array(inventorySize);
 var selected = 0;
 var inventoryCellSize = 100;
-var inventoryTop = canvas.height-inventoryCellSize-10;
-var inventoryLeft = canvas.width/2-inventoryCellSize*1.5;
+var inventoryTop = canvas.height-inventoryCellSize-15;
+var inventoryLeft = 20;
 
 var defaultDamage = 1;
+
+var hp = 5;
+var healthBarCellSize = 50;
+var healthBarLeft = 22;
+var healthBarTop = canvas.height-inventoryCellSize-30-healthBarCellSize;
+
+var wildlifeTypes = ["bear", "rabbit", "sanderling", "frog", "turtle"];
+
+var minimapSize = 50;
 
 function init() {
     for (let i = 0; i < startWildlifeAmount; i++) {
