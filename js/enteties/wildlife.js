@@ -6,7 +6,7 @@ class Animal {
             y: y
         };
 
-        while (mapArr[this.startPos.y][this.startPos.x].block == "water") {
+        while (mapArr[this.startPos.y][this.startPos.x] == "water") {
             this.startPos.x = Math.floor(Math.random()*mapSize.w);
             this.startPos.y = Math.floor(Math.random()*mapSize.h);
         }
@@ -206,7 +206,10 @@ class Animal {
         
                 try {
                     for (let i = 0; i < 10; i++) {
-                    if (mapArr[Math.round(this.goT.y)][Math.round(this.goTo.x)].block == "water") {
+                    if (this.goT.x < 0 || this.goT.x > mapArr[0].length || this.goT.y < 0 || this.goT.y > mapArr.length) {
+
+                        
+                    if (mapArr[Math.round(this.goT.y)][Math.round(this.goT.x)] == "water") {
                         
                         this.goT = {
                             x: Math.round(this.startPos.x+Math.floor(Math.random()*16)-8), 
@@ -214,7 +217,8 @@ class Animal {
                         };
                         
                     }
-                }
+                    }
+                    }
 
                 this.goT = {
                     x: clamp(Math.round(this.startPos.x+Math.floor(Math.random()*90)-45), 0, mapArr[0].length-1), 
@@ -222,7 +226,7 @@ class Animal {
                 };
                 
                 for (let i = 0; i < 10; i++) {
-                    if (mapArr[Math.round(this.goT.y)][Math.round(this.goTo.x)].block == "water") {
+                    if (mapArr[Math.round(this.goT.y)][Math.round(this.goTo.x)] == "water") {
                         
                         this.goT = {
                             x: clamp(Math.round(this.startPos.x+Math.floor(Math.random()*90)-45), 0, mapArr[0].length-1), 

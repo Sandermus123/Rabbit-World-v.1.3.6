@@ -120,6 +120,43 @@ function getLootData(lootType, dataType) {
     }
 }
 
+function blockIc(blocktype) {
+    this.ic = {x: 0, y: 0, w: 0, h: 0};
+    switch (blocktype) {
+        case "grass":
+            this.ic = {
+                x: 0, 
+                y: 0, 
+                w: spriteSheetGridSize, 
+                h: spriteSheetGridSize
+            };
+            break;
+        case "water":
+            this.ic = {
+                x: spriteSheetGridSize, 
+                y: 0, 
+                w: spriteSheetGridSize, 
+                h: spriteSheetGridSize
+            };
+            break;
+        case "sand":
+            this.ic = {
+                x: spriteSheetGridSize*4, 
+                y: 0, 
+                w: spriteSheetGridSize, 
+                h: spriteSheetGridSize};
+            break;
+        default:
+            this.ic = {
+                x: spriteSheetGridSize*3, 
+                y: 0, 
+                w: spriteSheetGridSize, 
+                h: spriteSheetGridSize};
+            break;
+    }
+    return this.ic;
+}
+
 function gameLoop() {
     
     nextTick = false;
@@ -163,10 +200,52 @@ function gameLoop() {
     }
 
     //world
+    /*let ___ic = blockIc(mapArr[pos.y][pos.x])
+    c.drawImage(
+        spriteSheet,
+                ___ic.x,
+                ___ic.y,
+                ___ic.w,
+                ___ic.h,
+                0*blockSize,
+                0*blockSize,
+                blockSize,
+                blockSize
+    );*/
 
-    for (let k = 0; k < mapSize.h; k++) {
-        for (let l = 0; l < mapSize.w; l++) {
-            mapArr[k][l].update();
+    /*for (let i = 0; i < screenSize.h; i++) {
+        let ___ic = blockIc(mapArr[Math.floor(pos.y)+i][0])
+        c.drawImage(
+            spriteSheet,
+            ___ic.x,
+            ___ic.y,
+            ___ic.w,
+            ___ic.h,
+            0*blockSize,
+            i*blockSize,
+            blockSize,
+            blockSize
+        );
+    }*/
+
+    for (let i = Math.floor(pos.y)-1; i < Math.floor(pos.y)+screenSize.h+1; i++) {
+        for (let j = Math.floor(pos.x)-1; j < Math.floor(pos.x)+screenSize.w+1; j++) {
+            try {
+                let ___ic = blockIc(mapArr[i][j]);
+                c.drawImage(
+                    spriteSheet,
+                    ___ic.x,
+                    ___ic.y,
+                    ___ic.w,
+                    ___ic.h,
+                    (j-pos.x)*blockSize,
+                    (i-pos.y)*blockSize,
+                    blockSize,
+                    blockSize
+                );
+            } catch (error) {
+                
+            }
         }
     }
 
@@ -222,19 +301,24 @@ function gameLoop() {
             if (wildlife[i].health <= 0) {
                 switch (wildlife[i].type) {
                     case "bear":
-                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), Math.round(wildlife[i].startPos.y), "meat_bear"));
+                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), 
+                        Math.round(wildlife[i].startPos.y), "meat_bear"));
                         break;
                     case "rabbit":
-                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), Math.round(wildlife[i].startPos.y), "meat_rabbit"));
+                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), 
+                        Math.round(wildlife[i].startPos.y), "meat_rabbit"));
                         break;
                     case "sanderling":
-                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), Math.round(wildlife[i].startPos.y), "feathers"));
+                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), 
+                        Math.round(wildlife[i].startPos.y), "feathers"));
                         break;
                     case "frog":
-                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), Math.round(wildlife[i].startPos.y), "slime"));
+                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), 
+                        Math.round(wildlife[i].startPos.y), "slime"));
                         break;
                     case "turtle":
-                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), Math.round(wildlife[i].startPos.y), "shell_turtle"));
+                        loot.push(new Loot(Math.round(wildlife[i].startPos.x), 
+                        Math.round(wildlife[i].startPos.y), "shell_turtle"));
                         break;
                 }
                 
@@ -266,6 +350,8 @@ function gameLoop() {
             realPress
             &&
             !rightClick
+            &&
+            !shiftPress
         ) {
             if (inventory[selected] != null) {
                 dropLoot = true;
@@ -289,6 +375,11 @@ function gameLoop() {
 
     //player
     pl.update();
+
+    c.globalAlpha = Math.abs(time-12)/16;
+    c.fillStyle = "#0B000F";
+    c.fillRect(0,0,canvas.width,canvas.height);
+    c.globalAlpha = 1.0;
 
     //cursor
     c.drawImage(
@@ -374,40 +465,47 @@ function gameLoop() {
         inventoryCellSize
     );
 
-    for (let i = 0; i < mapArr.length; i++) {
-        for (let j = 0; j < mapArr[i].length; j++) {
-            switch (mapArr[i][j].block) {
-                case "grass":
-                    c.fillStyle = "#2B8A2C";
-                    c.fillRect(j*2, i*2, 2, 2);
-                    break;
-                case "sand":
-                    try {
-                        if (mapArr[i+1][j].block == "grass" || mapArr[i-1][j].block == "grass" || mapArr[i][j+1].block == "grass" || mapArr[i][j-1].block == "grass") {
-                            c.fillStyle = "#c4a962";
-                            c.fillRect(j*2, i*2, 2, 2);
-                        }else {
+    if (minimap) {
+        for (let i = 0; i < mapArr.length; i+=2) {
+            for (let j = 0; j < mapArr[i].length; j+=2) {
+                switch (mapArr[i][j]) {
+                    case "grass":
+                        c.fillStyle = "#2B8A2C";
+                        c.fillRect(j*2, i*2, 4, 4);
+                        break;
+                    case "sand":
+                        try {
+                            if (mapArr[i+2][j] == "grass" || mapArr[i-2][j] == "grass" || mapArr[i][j+2] == "grass" || mapArr[i][j-2] == "grass") {
+                                c.fillStyle = "#c4a962";
+                                c.fillRect(j*2, i*2, 4, 4);
+                            }else {
+                                c.fillStyle = "#EBCE81";
+                                c.fillRect(j*2, i*2, 4, 4);
+                            }
+                        } catch (error) {
                             c.fillStyle = "#EBCE81";
-                            c.fillRect(j*2, i*2, 2, 2);
+                            c.fillRect(j*2, i*2, 4, 4);
                         }
-                    } catch (error) {
-                        c.fillStyle = "#EBCE81";
-                        c.fillRect(j*2, i*2, 2, 2);
-                    }
-                    break;
-                case "water":
-                    c.fillStyle = "#22AACC";
-                    c.fillRect(j*2, i*2, 2, 2);
-                    break;
+                        break;
+                    case "water":
+                        c.fillStyle = "#22AACC";
+                        c.fillRect(j*2, i*2, 4, 4);
+                        break;
+                }
+                
             }
-            
+        }
+    
+    
+    
+        c.fillStyle = "#000000";
+        c.fillRect((pl.pos.x)*2, (pl.pos.y)*2, 2, 2);
+    
+        for (let i = 0; i < wildlife.length; i++) {
+            c.fillStyle = "#BB0000";
+            c.fillRect((wildlife[i].startPos.x)*2, (wildlife[i].startPos.y)*2, 2, 2);
         }
     }
-
-
-
-    c.fillStyle = "#000000";
-    c.fillRect((pl.pos.x)*2, (pl.pos.y)*2, 2, 2);
 
     //walk
     if (canWalk && vel.x == 0 && vel.y == 0) {
@@ -430,6 +528,22 @@ function gameLoop() {
     }
 
     mousePressed = false;
+
+    time += 0.005;
+    if (time > 24) {
+        time = 0;
+    }
+
+    if (pos.x < 1) {
+        pos.x = 1;
+    }else if (pos.x > mapArr[0].length-screenSize.w-1) {
+        pos.x = mapArr[0].length-screenSize.w-1;
+    }
+    if (pos.y < 1) {
+        pos.y = 1;
+    }else if (pos.y > mapArr.length-screenSize.h-1) {
+        pos.y = mapArr.length-screenSize.h-1;
+    }
 }
 
 window.onload = function() {

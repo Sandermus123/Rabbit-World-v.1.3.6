@@ -25,8 +25,17 @@ function createMap(w, h) {
                 )
             ));
 
-            let d = dist/30;
-            mapArr[i].push(new Block(j, i, noise.simplex2(j/inc, i/inc)-d));
+            let d = dist/70;
+            let val = noise.simplex2(j/inc, i/inc)-d;
+            if (val > seaHeight) {
+                val = "grass";
+            }else if (val < seaHeight && val > seaHeight-0.3) {
+                val = "sand";
+            }else {
+                val = "water";
+            }
+            mapArr[i].push(val);
+            //mapArr[i].push(new Block(j, i, noise.simplex2(j/inc, i/inc)-d));
         }
     }
 

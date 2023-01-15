@@ -24,10 +24,14 @@ class Player {
             y: pos.y+this.off.y
         };
         if (canWalk) {
-            if (mapArr[this.pos.y][this.pos.x].block == "water") {
-                this.height = 0.7;
-            }else {
-                this.height = 1;
+            try {
+                if (mapArr[this.pos.y][this.pos.x] == "water") {
+                    this.height = 0.7;
+                }else {
+                    this.height = 1;
+                }
+            } catch (error) {
+                
             }
         }
         this.ic.x = spriteSheetGridSize*(1-this.dir);

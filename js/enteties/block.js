@@ -82,8 +82,8 @@ class Block {
         }
 
         this.pos = {x: (this.index.x-pos.x), y: (this.index.y-pos.y)};
-                c.drawImage(
-                    spriteSheet,
+        c.drawImage(
+            spriteSheet,
                     this.ic.x,
                     this.ic.y,
                     this.ic.w,
@@ -92,6 +92,7 @@ class Block {
                     this.pos.y*blockSize,
                     blockSize,
                     blockSize
-                );
+        );
+
     }
 }

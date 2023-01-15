@@ -1,20 +1,7 @@
 var key;
 document.addEventListener("keypress", event => {
     key = event.key;
-    switch (event.key) {
-        case "a" || "ArrowLeft":
-            keys.a = true;
-            break;
-        case "s" || "ArrowDown":
-            keys.s = true;
-            break;
-        case "d" || "ArrowRight":
-            keys.d = true;
-            break;
-        case "w" || "ArrowUp":
-            keys.w = true;
-            break;
-    }
+    
     switch (key) {
         case "q":
             if (inventory[selected] != null) {
@@ -61,7 +48,40 @@ document.addEventListener("keypress", event => {
             }
             
             break;
+            case "E":
+                switch (inventory[selected]) {
+                    case "meat_bear":
     
+                        if (hp < 3) {
+                            hp += 3;
+                            inventory[selected] = null;
+                        }else if (hp == 3) {
+                            hp += 2;
+                            inventory[selected] = null;
+                        }else if (hp == 4) {
+                            hp++;
+                            inventory[selected] = null;
+                        }
+                        break;
+                case "meat_rabbit":
+    
+                    if (hp < 4) {
+                        hp += 2;
+                        inventory[selected] = null;
+                    }else if (hp == 4) {
+                        hp++;
+                        inventory[selected] = null;
+                    }
+                        break;
+                    case "apple":
+    
+                        if (hp < 5) {
+                            hp++;
+                            inventory[selected] = null;
+                        }
+                }
+                
+                break;
 
         
         case "1":
@@ -88,23 +108,128 @@ document.addEventListener("keypress", event => {
                 pl.damage = getLootData(inventory[selected], "damage");                    }
             break;
         
+        
+    }
+});
+
+var shiftPress = false;
+
+document.addEventListener("keydown", event => {
+    key = event.key;
+    switch (event.key) {
+        case "a":
+            keys.a = true;
+            shiftPress = false;
+            break;
+        case "s":
+            keys.s = true;
+            shiftPress = false;
+            break;
+        case "d":
+            keys.d = true;
+            shiftPress = false;
+            break;
+        case "w":
+            keys.w = true;
+            shiftPress = false;
+            break;
+        case "ArrowLeft":
+            keys.a = true;
+            shiftPress = false;
+            break;
+        case "ArrowDown":
+            keys.s = true;
+            shiftPress = false;
+            break;
+        case "ArrowRight":
+            keys.d = true;
+            shiftPress = false;
+            break;
+        case "ArrowUp":
+            keys.w = true;
+            shiftPress = false;
+            break;
+            case "A":
+                keys.a = true;
+                shiftPress = true;
+                break;
+            case "S":
+                keys.s = true;
+                shiftPress = true;
+                break;
+            case "D":
+                keys.d = true;
+                shiftPress = true;
+                break;
+            case "W":
+                keys.w = true;
+                shiftPress = true;
+                break;
+            case "shift":
+                shiftPress = true;
+                break;
+            case "m":
+                if (minimap) {
+                    minimap = false;
+                }else {
+                    minimap = true;
+                }
     }
 });
 
 document.addEventListener("keyup", event => {
     switch (event.key) {
-        case "a" || "ArrowLeft":
+        case "a":
             keys.a = false;
+            shiftPress = false;
             break;
-        case "s" || "ArrowDown":
+        case "s":
             keys.s = false;
+            shiftPress = false;
             break;
-        case "d" || "ArrowRight":
+        case "d":
             keys.d = false;
+            shiftPress = false;
             break;
-        case "w" || "ArrowUp":
+        case "w":
             keys.w = false;
+            shiftPress = false;
             break;
+        case "ArrowLeft":
+            keys.a = false;
+            shiftPress = false;
+            break;
+        case "ArrowDown":
+            keys.s = false;
+            shiftPress = false;
+            break;
+        case "ArrowRight":
+            keys.d = false;
+            shiftPress = false;
+            break;
+        case "ArrowUp":
+            keys.w = false;
+            shiftPress = false;
+            break;
+            case "A":
+                keys.a = false;
+                shiftPress = false;
+                break;
+            case "S":
+                keys.s = false;
+                shiftPress = false;
+                break;
+            case "D":
+                keys.d = false;
+                shiftPress = false;
+                break;
+            case "W":
+                keys.w = false;
+                shiftPress = false;
+                break;
+            case "shift":
+                shiftPress = false;
+                break;
     }
 });
 

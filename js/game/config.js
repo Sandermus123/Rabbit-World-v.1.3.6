@@ -53,7 +53,7 @@ var blocks = [
 ];
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
-var mapSize = {w: 100, h: 100};
+var mapSize = {w: 140, h: 140};
 var blockSize = 140;
 const spriteSheetGridSize = 200;
 var mapArr = [];
@@ -63,19 +63,22 @@ screenSize.h = Math.floor(window.innerHeight/blockSize);
 var pos = {x: 50, y: 50};
 var speed = 0.2;
 var vel = {x: 0, y: 0};
-const inc = Math.floor(Math.random()*20)+20;
+const inc = Math.floor(Math.random()*20)+70;
 canvas.width = screenSize.w*blockSize;
 canvas.height = screenSize.h*blockSize;
 document.querySelector("body").width = screenSize.w*blockSize;
 document.querySelector("body").height = screenSize.h*blockSize;
 document.querySelector("html").width = screenSize.w*blockSize;
 document.querySelector("html").height = screenSize.h*blockSize;
-var seaHeight = -0.2;
+var seaHeight = -0.4;
 var canWalk = true;
 var cursorSize = 30;
 var cursorPos = {x: 0, y: 0, X: 0, Y: 0};
 cursorPos.X = Math.floor(cursorPos.x/blockSize);
 cursorPos.Y = Math.floor(cursorPos.y/blockSize);
+
+var time = 12;
+var minimap = false;
 
 const startChestAmount = 30;
 const startWildlifeAmount = 50;
