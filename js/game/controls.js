@@ -29,7 +29,8 @@ document.addEventListener("keypress", event => {
                         inventory[selected] = null;
                     }
                     break;
-            case "meat_rabbit":
+
+                case "meat_rabbit":
 
                 if (hp < 4) {
                     hp += 2;
@@ -45,43 +46,15 @@ document.addEventListener("keypress", event => {
                         hp++;
                         inventory[selected] = null;
                     }
-            }
-            
-            break;
-            case "E":
-                switch (inventory[selected]) {
-                    case "meat_bear":
-    
-                        if (hp < 3) {
-                            hp += 3;
-                            inventory[selected] = null;
-                        }else if (hp == 3) {
-                            hp += 2;
-                            inventory[selected] = null;
-                        }else if (hp == 4) {
-                            hp++;
-                            inventory[selected] = null;
-                        }
-                        break;
-                case "meat_rabbit":
-    
-                    if (hp < 4) {
-                        hp += 2;
-                        inventory[selected] = null;
-                    }else if (hp == 4) {
-                        hp++;
-                        inventory[selected] = null;
-                    }
-                        break;
-                    case "apple":
-    
-                        if (hp < 5) {
-                            hp++;
-                            inventory[selected] = null;
-                        }
-                }
+                    break;
                 
-                break;
+                    case "potion_poison":
+                        inventory[selected] = null;
+                        hp--;
+                        getEffect("speed");
+                        break;
+            }
+        break;
 
         
         case "1":
@@ -261,5 +234,23 @@ var realPress = true;
 function mdown() {
     if (realPress) {
         mousePressed = true;
+    }
+}
+
+function getEffect(effect) {
+    switch (effect) {
+        case "speed":
+            speed = 0.25;
+            setInterval(removeEffect("speed"), 6000);
+            break;
+    }
+}
+
+function removeEffect(effect) {
+    switch (effect) {
+        case "speed":
+            console.log("ldsakm");
+            while (Math.floor(pos.x*1000)/1000)
+            break;
     }
 }

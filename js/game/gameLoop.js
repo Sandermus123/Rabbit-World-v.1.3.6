@@ -199,35 +199,6 @@ function gameLoop() {
         realPress = true;
     }
 
-    //world
-    /*let ___ic = blockIc(mapArr[pos.y][pos.x])
-    c.drawImage(
-        spriteSheet,
-                ___ic.x,
-                ___ic.y,
-                ___ic.w,
-                ___ic.h,
-                0*blockSize,
-                0*blockSize,
-                blockSize,
-                blockSize
-    );*/
-
-    /*for (let i = 0; i < screenSize.h; i++) {
-        let ___ic = blockIc(mapArr[Math.floor(pos.y)+i][0])
-        c.drawImage(
-            spriteSheet,
-            ___ic.x,
-            ___ic.y,
-            ___ic.w,
-            ___ic.h,
-            0*blockSize,
-            i*blockSize,
-            blockSize,
-            blockSize
-        );
-    }*/
-
     for (let i = Math.floor(pos.y)-1; i < Math.floor(pos.y)+screenSize.h+1; i++) {
         for (let j = Math.floor(pos.x)-1; j < Math.floor(pos.x)+screenSize.w+1; j++) {
             try {
@@ -372,9 +343,18 @@ function gameLoop() {
         ));
     }
     dropLoot = false;
+    
+    for (let i = 0; i < plants.length; i++) {
+        //plants[i].drawShadow();
+    }
 
     //player
     pl.update();
+
+    //plant
+    for (let i = 0; i < plants.length; i++) {
+        plants[i].update();
+    }
 
     c.globalAlpha = Math.abs(time-12)/16;
     c.fillStyle = "#0B000F";
@@ -495,7 +475,7 @@ function gameLoop() {
                 
             }
         }
-    
+        
     
     
         c.fillStyle = "#000000";

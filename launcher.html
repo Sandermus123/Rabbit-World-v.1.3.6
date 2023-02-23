@@ -1,12 +1,19 @@
 <html>
     <head>
-        <title>Rabbit World</title>
+        <title>Rabbit World 1.3.4</title>
+        <link rel="icon" href="assets/favicon.ico">
     </head>
     <body>
         <canvas>
             Game
         </canvas>
     </body>
+
+    <audio controls autoplay id="audio">
+        <source src="assets/Sunrise.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+      
 
     <script src="js/game/spritesheet.js"></script>
     <script src="js/game/config.js"></script>
@@ -17,7 +24,7 @@
     <script src="js/enteties/wildlife.js"></script>
     <script src="js/enteties/loot.js"></script>
     <script src="js/enteties/player.js"></script>
-    <script src="js/enteties/block.js"></script>
+    <script src="js/enteties/plant.js"></script>
 
     <script src="js/main.js"></script>
     
@@ -38,5 +45,9 @@
         padding: 0;
         position: absolute;
         cursor: none;
+    }
+
+    #audio {
+        display: none;
     }
 </style>

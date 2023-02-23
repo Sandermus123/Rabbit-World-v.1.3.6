@@ -80,12 +80,14 @@ cursorPos.Y = Math.floor(cursorPos.y/blockSize);
 var time = 12;
 var minimap = false;
 
-const startChestAmount = 30;
+const startChestAmount = 150;
 const startWildlifeAmount = 50;
+const startPlantAmount = 1000;
 var loot = [];
 var lootTypes = ["potion_poison", "potion_water", "sword_flint", "sword_quartz", "sword_carbon", "apple"];
 var chests = [];
 var wildlife = [];
+var plants = [];
 
 var inventorySize = 4;
 var inventory = new Array(inventorySize);
@@ -107,9 +109,12 @@ var minimapSize = 50;
 
 function init() {
     for (let i = 0; i < startWildlifeAmount; i++) {
-        wildlife.push(new Animal())
+        wildlife.push(new Animal());
     }
     for (let i = 0; i < startChestAmount; i++) {
-        chests.push(new Chest())
+        chests.push(new Chest());
+    }
+    for (let i = 0; i < startPlantAmount; i++) {
+        plants.push(new Plant());
     }
 }
