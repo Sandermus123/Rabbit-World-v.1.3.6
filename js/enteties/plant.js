@@ -70,23 +70,24 @@ class Plant {
         );
     }
 
-    drawShadow() {
+    shadow() {
+        this.a = 0;
         if (this.type == "tree") {
-            let a = 2;
+            this.a = 2;
         }else {
-            let a = 1;
+            this.a = 1;
         }
 
         c.drawImage(
             spriteSheet,
             this.ic.x,
-            this.ic.y+(spriteSheetGridSize*a),
+            this.ic.y+(spriteSheetGridSize*this.a),
             this.ic.w,
             this.ic.h,
             Math.floor(this.pos.x*blockSize),
             Math.floor(this.pos.y*blockSize),
-            blockSize*2,
-            blockSize*2
+            blockSize,
+            blockSize
         );
     }
 }

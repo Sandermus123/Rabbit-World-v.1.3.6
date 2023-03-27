@@ -344,8 +344,15 @@ function gameLoop() {
     }
     dropLoot = false;
     
+    //plant
     for (let i = 0; i < plants.length; i++) {
-        //plants[i].drawShadow();
+        plants[i].shadow();
+    }
+
+    for (let i = 0; i < plants.length; i++) {
+        if (plants[i].type == "aloe") {
+            plants[i].update();
+        }
     }
 
     //player
@@ -353,7 +360,9 @@ function gameLoop() {
 
     //plant
     for (let i = 0; i < plants.length; i++) {
-        plants[i].update();
+        if (plants[i].type == "tree") {
+            plants[i].update();
+        }
     }
 
     c.globalAlpha = Math.abs(time-12)/16;
@@ -476,8 +485,6 @@ function gameLoop() {
             }
         }
         
-    
-    
         c.fillStyle = "#000000";
         c.fillRect((pl.pos.x)*2, (pl.pos.y)*2, 2, 2);
     
