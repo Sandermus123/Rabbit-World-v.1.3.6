@@ -146,6 +146,13 @@ function blockIc(blocktype) {
                 w: spriteSheetGridSize, 
                 h: spriteSheetGridSize};
             break;
+        case "jungle_grass":
+        this.ic = {
+            x: spriteSheetGridSize*5, 
+            y: 0, 
+            w: spriteSheetGridSize, 
+            h: spriteSheetGridSize};
+            break;
         default:
             this.ic = {
                 x: spriteSheetGridSize*3, 
@@ -345,9 +352,9 @@ function gameLoop() {
     dropLoot = false;
     
     //plant
-    for (let i = 0; i < plants.length; i++) {
+    /*for (let i = 0; i < plants.length; i++) {
         plants[i].shadow();
-    }
+    }*/
 
     for (let i = 0; i < plants.length; i++) {
         if (plants[i].type == "aloe") {
@@ -355,12 +362,16 @@ function gameLoop() {
         }
     }
 
+    for (let i = 0; i < rocks.length; i++) {
+        rocks[i].update();
+    }
+
     //player
     pl.update();
 
     //plant
     for (let i = 0; i < plants.length; i++) {
-        if (plants[i].type == "tree") {
+        if (plants[i].type == "tree" || plants[i].type == "jungle_tree") {
             plants[i].update();
         }
     }
@@ -462,6 +473,10 @@ function gameLoop() {
                         c.fillStyle = "#2B8A2C";
                         c.fillRect(j*2, i*2, 4, 4);
                         break;
+                    case "jungle_grass":
+                        c.fillStyle = "#134a39";
+                        c.fillRect(j*2, i*2, 4, 4);
+                        break;
                     case "sand":
                         try {
                             if (mapArr[i+2][j] == "grass" || mapArr[i-2][j] == "grass" || mapArr[i][j+2] == "grass" || mapArr[i][j-2] == "grass") {
@@ -485,6 +500,8 @@ function gameLoop() {
             }
         }
         
+    
+    
         c.fillStyle = "#000000";
         c.fillRect((pl.pos.x)*2, (pl.pos.y)*2, 2, 2);
     

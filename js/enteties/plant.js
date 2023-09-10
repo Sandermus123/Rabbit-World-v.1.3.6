@@ -4,11 +4,9 @@ class Plant {
         y=Math.floor(Math.random()*mapSize.h), type=null) {
 
         
-        if (type == null) {
-            this.type = ["aloe", "tree"][Math.round(Math.random())];
-        }else {
-            this.type = "fig";
-        }
+        //if (type == null) {
+            this.type = ["aloe", "tree", "jungle_tree"][Math.floor(Math.random()*3)];
+        //}
 
         this.growState = 0;
 
@@ -29,6 +27,14 @@ class Plant {
                     h: spriteSheetGridSize
                 }
                 break;
+            case "jungle_tree":
+                this.ic = {
+                    x: spriteSheetGridSize*4,
+                    y: spriteSheetGridSize*7,
+                    w: spriteSheetGridSize*2,
+                    h: spriteSheetGridSize*2
+                }
+                break;
         }
 
         this.startPos = {
@@ -36,7 +42,19 @@ class Plant {
             y: y
         };
 
-        while (mapArr[this.startPos.y][this.startPos.x] == "water") {
+        while (mapArr[this.startPos.y][this.startPos.x] != "grass" && this.type == "tree") {
+            this.startPos = {
+                x: Math.floor(Math.random()*mapSize.w),
+                y: Math.floor(Math.random()*mapSize.h)
+            }
+        }
+        while (mapArr[this.startPos.y][this.startPos.x] != "jungle_grass" && this.type == "jungle_tree") {
+            this.startPos = {
+                x: Math.floor(Math.random()*mapSize.w),
+                y: Math.floor(Math.random()*mapSize.h)
+            }
+        }
+        while (mapArr[this.startPos.y][this.startPos.x] != "sand" && this.type == "aloe") {
             this.startPos = {
                 x: Math.floor(Math.random()*mapSize.w),
                 y: Math.floor(Math.random()*mapSize.h)
@@ -70,7 +88,7 @@ class Plant {
         );
     }
 
-    shadow() {
+    /*shadow() {
         this.a = 0;
         if (this.type == "tree") {
             this.a = 2;
@@ -89,5 +107,5 @@ class Plant {
             blockSize,
             blockSize
         );
-    }
+    }*/
 }

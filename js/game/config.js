@@ -36,7 +36,7 @@ var sl = {
         }
         return num;
     },
-    pi: 3.141592653589793,
+    pi: 3.141592,
     touches(x1, y1, w1, h1, x2, y2, w2, h2) {
         if (x1 < x2 + w2 &&
             x1 + w1 > x2 &&
@@ -54,7 +54,7 @@ var blocks = [
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 var mapSize = {w: 140, h: 140};
-var blockSize = 140;
+var blockSize = 145;
 const spriteSheetGridSize = 200;
 var mapArr = [];
 const screenSize = {w: 100,h: 100};
@@ -83,11 +83,20 @@ var minimap = false;
 const startChestAmount = 150;
 const startWildlifeAmount = 50;
 const startPlantAmount = 1000;
+const startRockAmount = 200;
+
 var loot = [];
-var lootTypes = ["potion_poison", "potion_water", "sword_flint", "sword_quartz", "sword_carbon", "apple"];
+var lootTypes = [
+    "potion_poison", 
+    "potion_water", 
+    "sword_flint", 
+    "sword_quartz", 
+    "sword_carbon", 
+    "apple", "showel"];
 var chests = [];
 var wildlife = [];
 var plants = [];
+var rocks = [];
 
 var inventorySize = 4;
 var inventory = new Array(inventorySize);
@@ -116,5 +125,8 @@ function init() {
     }
     for (let i = 0; i < startPlantAmount; i++) {
         plants.push(new Plant());
+    }
+    for (let i = 0; i < startRockAmount; i++) {
+        rocks.push(new Rock());
     }
 }

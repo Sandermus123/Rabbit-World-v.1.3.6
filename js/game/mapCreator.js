@@ -12,7 +12,6 @@ function createMap(w, h) {
         mapArr.push(new Array());
 
         for (let j = 0; j < h; j++) {
-            let randno = Math.floor(Math.random() * blocks.length);
 
             let x1 = j;
             let y1 = i;
@@ -27,10 +26,12 @@ function createMap(w, h) {
 
             let d = dist/70;
             let val = noise.simplex2(j/inc, i/inc)-d;
-            if (val > seaHeight) {
+            if (val > seaHeight && val < seaHeight + 0.45) {
                 val = "grass";
-            }else if (val < seaHeight && val > seaHeight-0.3) {
+            }else if (val < seaHeight && val > seaHeight-0.2) {
                 val = "sand";
+            }else if (val >= seaHeight +0.45) {
+                val = "jungle_grass";
             }else {
                 val = "water";
             }
