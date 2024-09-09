@@ -310,7 +310,7 @@ function gameLoop() {
 
     //loot
 
-    let sel;
+    var sel;
     for (let m = loot.length-1; m >= 0; m--) {
         loot[m].update();
         if (
@@ -364,10 +364,56 @@ function gameLoop() {
 
     for (let i = 0; i < rocks.length; i++) {
         rocks[i].update();
+        if (
+            sl.touches(
+            rocks[i].pos.x*blockSize, 
+            rocks[i].pos.y*blockSize, 
+            blockSize, blockSize, 
+            cursorPos.x,
+            cursorPos.y,
+            cursorSize, cursorSize
+            )
+            &&
+            mousePressed
+            &&
+            realPress
+        ) {
+            rocks[i].health -= pl.damage;
+            realPress = false;
+            if (rocks[i].health <= 0) {
+                
+                index = i;
+            }
+        }
     }
 
     //player
     pl.update();
+    
+    /*
+    Her begynder det at gå galt
+    Der skal tegnes en lille figur af den ting man har i hånden ved siden af kaninen
+    */
+    //console.log(inventory[selected]);
+
+    /*if (inventory[selected] == "sword_flint" || inventory[selected] == "sword_quartz") {
+    c.drawImage(
+        getLootData(inventory[selected], "ic").x,
+        getLootData(inventory[selected], "ic").y,
+        getLootData(inventory[selected], "ic").w,
+        getLootData(inventory[selected], "ic").h,
+        /*screenSize.w/2*blockSize-5,
+        screenSize.h/2*blockSize-24,
+        95,
+        95
+        0, 0, 100, 100
+    );
+    }*/
+
+    //objects
+    for (let i = 0; i < objects.length; i++) {
+        objects[i].update();
+    }
 
     //plant
     for (let i = 0; i < plants.length; i++) {
@@ -437,6 +483,13 @@ function gameLoop() {
             inventoryCellSize
         );
     }
+
+    c.fillStyle = "#f5e040";
+    c.roundRect(inventoryLeft, 30, xp, 20, 10);
+    c.fill();
+    c.fillStyle = "#ffee6b";
+    c.roundRect(inventoryLeft, 30, xp, 20, 10);
+    c.stroke();
 
     //health bar
     for (let i = 0; i < hp; i++) {
@@ -508,6 +561,11 @@ function gameLoop() {
         for (let i = 0; i < wildlife.length; i++) {
             c.fillStyle = "#BB0000";
             c.fillRect((wildlife[i].startPos.x)*2, (wildlife[i].startPos.y)*2, 2, 2);
+        }
+
+        for (let i = 0; i < objects.length; i++) {
+            c.fillStyle = "#000000";
+            c.fillRect((objects[i].startPos.x)*2, (objects[i].startPos.y)*2, 2, 2);
         }
     }
 

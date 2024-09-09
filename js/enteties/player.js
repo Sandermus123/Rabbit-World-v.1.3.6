@@ -7,8 +7,8 @@ class Player {
         };
         this.dir = 1; // direction: 0 | 1
         this.ic = {
-            x: spriteSheetGridSize*(1-this.dir), 
-            y: spriteSheetGridSize*4, 
+            x: spriteSheetGridSize*(4-this.dir), 
+            y: 0, 
             w: spriteSheetGridSize, 
             h: spriteSheetGridSize
         };
@@ -36,7 +36,7 @@ class Player {
         }
         this.ic.x = spriteSheetGridSize*(1-this.dir);
         c.drawImage(
-            spriteSheet,
+            animal_spritesheet,
             this.ic.x,
             this.ic.y,
             this.ic.w,

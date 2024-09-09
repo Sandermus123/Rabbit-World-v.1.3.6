@@ -1,14 +1,14 @@
-class Rock {
+class Object {
     constructor(
         x=Math.floor(Math.random()*mapSize.w), 
         y=Math.floor(Math.random()*mapSize.h)) {
 
 
         this.ic = {
-            x: spriteSheetGridSize*3,
-            y: spriteSheetGridSize,
-            w: spriteSheetGridSize,
-            h: spriteSheetGridSize
+            x: 0,
+            y: spriteSheetGridSize*7,
+            w: spriteSheetGridSize*2,
+            h: spriteSheetGridSize*2
         }
     
         this.startPos = {
@@ -27,7 +27,6 @@ class Rock {
             x: 0, 
             y: 0
         }
-        this.hp = 5;
     }
 
     update() {
@@ -45,8 +44,6 @@ class Rock {
             this.ic.w/spriteSheetGridSize*blockSize,
             this.ic.h/spriteSheetGridSize*blockSize
         );
-
-        
 
         /*rect(
             Math.floor(this.pos.x*blockSize),

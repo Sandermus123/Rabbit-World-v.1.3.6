@@ -97,6 +97,10 @@ var chests = [];
 var wildlife = [];
 var plants = [];
 var rocks = [];
+var objects = [];
+
+var xp = 0;
+var level = 0;
 
 var inventorySize = 4;
 var inventory = new Array(inventorySize);
@@ -129,4 +133,7 @@ function init() {
     for (let i = 0; i < startRockAmount; i++) {
         rocks.push(new Rock());
     }
+    /*for (let i = 0; i < 100; i++) {
+        objects.push(new Object);
+    }*/
 }
